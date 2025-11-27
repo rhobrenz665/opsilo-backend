@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "XuTPacI/i+k=",
+  "success": true,
+  "projectFilePath": "C:\\RhobrenzHQ\\PROJECTS\\opsilo-backend\\Api.Main\\Api.Main.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rhobr\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.0\\microsoft.aspnetcore.openapi.10.0.0.nupkg.sha512",
+    "C:\\Users\\rhobr\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
