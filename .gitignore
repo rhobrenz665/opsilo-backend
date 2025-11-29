@@ -1,0 +1,97 @@
+# -------------------------
+# Visual Studio / Rider / VS Code
+# -------------------------
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln.iml
+
+# -------------------------
+# Build outputs
+# -------------------------
+[Bb]in/
+[Oo]bj/
+out/
+artifacts/
+publish/
+Debug/
+Release/
+
+# -------------------------
+# NuGet / dotnet SDK
+# -------------------------
+*.nupkg
+*.snupkg
+**/packages/
+.project.lock.json
+project.assets.json
+.nuget/
+.dotnet/
+
+# -------------------------
+# Logs, test results, coverage
+# -------------------------
+*.log
+TestResults/
+*.coverage
+*.coveragexml
+*.trx
+coverage/
+
+# -------------------------
+# User secrets & local settings
+# -------------------------
+secrets.json
+local.settings.json
+appsettings.*.Development.json
+appsettings.*.Local.json
+Properties/launchSettings.json
+
+# -------------------------
+# Database files
+# -------------------------
+*.mdf
+*.ldf
+*.db
+*.db-journal
+
+# -------------------------
+# OS files
+# -------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -------------------------
+# Misc
+# -------------------------
+*.userprefs
+*.pid
+*.seeddata
+*.vsix
+
+# -------------------------
+# EF Core migrations snapshots (optional)
+# -------------------------
+Migrations/
+
+# -------------------------
+# HTTP request files (optional)
+# -------------------------
+# *.http
+
+# -------------------------
+# -------------------------
+node_modules/
+dist/
+*.tsbuildinfo
+
+# -------------------------
+# Docker / Containers
+# -------------------------
+.docker/
+docker-compose.override.yml
