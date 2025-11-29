@@ -1,14 +1,20 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection.Emit;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Persistence
 {
     public class AppDbContext : DbContext
     {
-        private readonly TenantContext _tenant;
+        private readonly TenantContext? _tenant;
 
+        // Design-time constructor (used by EF Core migrations)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
+
+        // Runtime constructor (used in this app)
         public AppDbContext(DbContextOptions<AppDbContext> options, TenantContext tenant)
             : base(options)
         {
@@ -23,9 +29,29 @@ namespace Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // Apply tenant filter globally for tenant-scoped entities
-            modelBuilder.Entity<TenantScopedEntity>()
-                        .HasQueryFilter(e => e.TenantId == _tenant.TenantId);
+            // Apply default value for TenantId to avoid non-nullable issues at design-time
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(TenantScopedEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    // Default value for TenantId in database
+                    modelBuilder.Entity(entityType.ClrType)
+                        .Property(nameof(TenantScopedEntity.TenantId))
+                        .HasDefaultValue(Guid.Empty);
+
+                    // Runtime query filter
+                    if (_tenant != null)
+                    {
+                        var parameter = Expression.Parameter(entityType.ClrType, "e");
+                        var property = Expression.Property(parameter, nameof(TenantScopedEntity.TenantId));
+                        var tenantId = Expression.Constant(_tenant.TenantId);
+                        var compare = Expression.Equal(property, tenantId);
+                        var lambda = Expression.Lambda(compare, parameter);
+
+                        modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+                    }
+                }
+            }
         }
     }
 }
