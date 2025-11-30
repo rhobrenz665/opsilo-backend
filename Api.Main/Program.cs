@@ -1,6 +1,7 @@
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Shared.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,10 @@ builder.Services.AddScoped<TenantContext>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,14 +26,11 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.MapGet("/hello", () =>
-{
-    return Results.Ok(new { Message = "Hello from Opsio Main API on .NET 10!" });
-});
-
-
-
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

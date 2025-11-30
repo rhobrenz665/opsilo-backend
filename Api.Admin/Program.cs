@@ -1,5 +1,6 @@
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Shared.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<TenantContext>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
@@ -23,14 +26,17 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapGet("/hello", () =>
 {
     return Results.Ok(new { Message = "Hello from Opsio Admin API on .NET 10!" });
 });
 
 
-
-app.UseHttpsRedirection();
 
 
 app.Run();
